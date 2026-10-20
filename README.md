@@ -129,3 +129,13 @@ https://docs.google.com/spreadsheets/d/e/2PACX-1vSM1t6p0yq--zlMTurZyg4bYq0ls9Osq
 
 ## Versi V45 — Jadual pengisian rekod
 Tab Pengisian Rekod menggunakan jadual dengan lajur Bil., Nama Murid, Penghantaran, Status Tugasan, Sebab Tidak Hantar, Status Semasa dan Mata. Pilihan Lengkap / Tidak Lengkap automatik menandakan Hantar; pilihan Tidak Hadir / Tiada Sebab automatik menandakan Tidak Hantar. Semua fungsi Apps Script dan konfigurasi sambungan V44 dikekalkan.
+
+
+## V46 — Paparan jadual murid
+Paparan Pengisian Rekod ialah jadual satu baris bagi setiap murid, bukan kad. Selepas upload `index.html`, pastikan penanda `V46 · JADUAL` kelihatan pada header. Jika paparan masih kad, semak fail `index.html` pada GitHub Pages dan buat hard refresh (Ctrl+Shift+R / Cmd+Shift+R). Jika menggunakan Google Sites, pastikan iframe/embed memaparkan URL GitHub Pages terkini, bukan kod HTML lama yang ditampal.
+
+
+## V47 – Pembetulan Jadual
+- Header kolum dijadikan statik, bukan sticky.
+- Lebar kolum diseragamkan menggunakan colgroup dan table-layout fixed.
+- Jadual boleh ditatal mendatar pada skrin kecil; status dan fungsi sedia ada dikekalkan.

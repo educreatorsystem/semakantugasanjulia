@@ -251,7 +251,7 @@
     table { width:100%; border-collapse:separate; border-spacing:0; min-width:820px; background:transparent; }
     th, td { border-bottom:1px solid rgba(222,226,245,.85); padding:12px; text-align:left; vertical-align:middle; font-size:.92rem; }
     th { background:linear-gradient(180deg, #fff8fb, #ecf6ff); color:#68589d; font-size:.79rem; text-transform:uppercase; letter-spacing:.04em; }
-    #recordTableArea th { position:sticky; top:94px; z-index:5; }
+    #recordTableArea th { position:static; top:auto; z-index:auto; }
     tbody tr:hover { background:rgba(251,245,255,.7); }
     .number-cell { width:58px; text-align:center; color:var(--brand-dark); font-weight:900; }
     .student-name { min-width:210px; font-weight:800; line-height:1.35; overflow-wrap:anywhere; }
@@ -333,24 +333,26 @@
     @keyframes buttonBounce { 0% { transform:translateY(0) scale(1);} 50% { transform:translateY(4px) scale(.97);} 100% { transform:translateY(2px) scale(.99);} }
     @keyframes confettiFall { 0% { transform:translateY(0) rotate(0deg); opacity:1;} 100% { transform:translateY(110vh) rotate(480deg); opacity:0;} }
     @keyframes starFall { 0% { transform:translateY(0) scale(.9) rotate(0deg); opacity:1;} 100% { transform:translateY(105vh) translateX(20px) scale(1.2) rotate(180deg); opacity:0;} }
-    @media (max-width:1080px) { .topbar { align-items:stretch; flex-direction:column; } .hero-art { width:100%; min-height:104px; } .tabs { width:100%; } .tab-btn { flex:1; } .form-grid, .filter-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } #recordTableArea th { top:150px; } }
+    @media (max-width:1080px) { .topbar { align-items:stretch; flex-direction:column; } .hero-art { width:100%; min-height:104px; } .tabs { width:100%; } .tab-btn { flex:1; } .form-grid, .filter-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } #recordTableArea th { position:static; top:auto; } }
     @media (max-width:700px) { main { padding-inline:12px; } .form-grid, .filter-grid, .summary-strip, .record-context, .subject-cards { grid-template-columns:1fr; } .choice-group { grid-template-columns:1fr; min-width:100%; } .panel-head { padding-inline:16px; } .form-grid, .filter-grid, .summary-strip, .toolbar, .subject-cards, .record-card-grid { padding-inline:16px; } .record-card-grid { grid-template-columns:1fr; } .record-context { padding-inline:16px; } .hero-art { min-height:92px; } .mascot-bubble { width:98px; height:98px; } .rainbow { right:0; width:148px; } h1 { font-size:1.02rem; } .btn, .tab-btn, input, select { min-height:50px; } .topbar { padding-bottom:16px; } }
     @media print { body { background:#ffffff; } .topbar, .no-print, .tabs, .toolbar, .panel-head.filters, #celebrationLayer, .subject-cards { display:none !important; } main { padding:0; max-width:none; } .panel { box-shadow:none; border:0; margin:0; } .print-content { width:210mm; min-height:297mm; padding:14mm; background:#ffffff; } .print-title { display:block; text-align:center; margin-bottom:14px; } .summary-strip { grid-template-columns:repeat(2, 1fr); } th { position:static; } table { min-width:0; } }
 
     /* Super Edu Adventure — jadual semakan pantas murid */
-    #recordTableArea { overflow: visible; }
+    #recordTableArea { overflow: hidden; width: 100%; }
     .table-instructions { padding: 13px 20px; font-size: .85rem; color: #66549a; background: #fbf6ff; border-bottom: 1px solid #eee3ff; }
     .student-table-scroll { overflow-x: auto; overscroll-behavior-x: contain; max-width: 100%; }
-    .student-record-table { min-width: 1110px; border-collapse: separate; border-spacing: 0; }
-    .student-record-table thead th { background: #eeeaff; color: #554390; position: sticky; top: 0; z-index: 3; text-align: center; }
+    .student-record-table { min-width: 1460px; border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
+    .student-record-table thead th { background: #eeeaff; color: #554390; position: static !important; top: auto !important; z-index: auto !important; text-align: center; vertical-align: middle; white-space: normal; }
     .student-record-table thead th:nth-child(2) { text-align: left; }
     .student-record-table td { background: rgba(255,255,255,.96); border-bottom: 1px solid #ebe6f9; padding: 10px 12px; }
     .student-record-table tbody tr:nth-child(even) td { background: #fbf8ff; }
     .student-record-table tbody tr:hover td { background: #f4f0ff; }
+    .student-record-table tbody tr { display: table-row !important; }
+    .student-record-table .choice-btn { display: inline-flex; align-items: center; justify-content: center; }
     .student-record-table .student-name { min-width: 190px; max-width: 260px; font-size: .88rem; }
     .student-record-table .number-cell { min-width: 50px; }
-    .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { position: sticky; left: 0; z-index: 2; box-shadow: 5px 0 12px rgba(91,70,170,.05); }
-    .student-record-table th:nth-child(2) { z-index: 4; }
+    .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { position: static !important; left: auto !important; z-index: auto !important; box-shadow: none; }
+    .student-record-table th:nth-child(2) { z-index: auto; }
     .table-buttons { display: flex; align-items: center; gap: 6px; justify-content: center; }
     .table-choice { border-radius: 13px; min-height: 43px; min-width: 95px; padding: 8px 9px; font-size: .80rem; white-space: nowrap; }
     .table-choice[data-kind="incomplete"], .table-choice[data-kind="missing"] { min-width: 112px; }
@@ -362,7 +364,7 @@
     .student-record-table .score-badge { min-width: 55px; }
     @media (max-width:700px) {
       .table-instructions { padding: 12px 14px; }
-      .student-record-table { min-width: 1050px; }
+      .student-record-table { min-width: 1460px; }
       .table-choice { min-height: 46px; }
       .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { min-width: 150px; max-width: 176px; }
     }
@@ -382,7 +384,7 @@
           </svg>
         </div>
         <div class="hero-copy">
-          <span class="eyebrow">🌈 Super Edu Adventure</span>
+          <span class="eyebrow">🌈 Super Edu Adventure <strong style="margin-left:6px;background:#7455d5;color:white;border-radius:999px;padding:3px 9px;font-size:.7rem">V47 · JADUAL</strong></span>
           <div>
             <h1>Sistem Semakan Penghantaran Tugasan Murid</h1>
             <p class="subtitle">Dashboard pastel bertema pengembaraan pembelajaran dengan kad tugasan comel, statistik guru yang kemas dan pengalaman mesra telefon.</p>
@@ -965,9 +967,13 @@
           <div><span>Tugasan</span><strong>📝 ${escapeHtml(meta.assignment)}</strong></div>
           <div><span>Subjek</span><strong>${getSubjectIcon(meta.subject)} ${escapeHtml(meta.subject)}</strong></div>
         </div>
-        <div class="table-instructions">✨ Tandakan status setiap murid. Tekan <strong>Lengkap / Tidak Lengkap</strong> untuk terus menandakan Hantar, atau pilih sebab jika Tidak Hantar.</div>
+        <div class="table-instructions"><strong>📋 V47 — Jadual kemas & header sejajar</strong> · Tandakan status setiap murid. Tekan <strong>Lengkap / Tidak Lengkap</strong> untuk terus menandakan Hantar, atau pilih sebab jika Tidak Hantar.</div>
         <div class="student-table-scroll">
           <table class="student-record-table">
+            <colgroup>
+              <col style="width:54px"><col style="width:230px"><col style="width:290px">
+              <col style="width:295px"><col style="width:260px"><col style="width:225px"><col style="width:80px">
+            </colgroup>
             <thead><tr><th>Bil.</th><th>Nama Murid</th><th>Penghantaran</th><th>Status Tugasan</th><th>Sebab Tidak Hantar</th><th>Status Semasa</th><th>Mata</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
