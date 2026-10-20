@@ -336,6 +336,38 @@
     @media (max-width:1080px) { .topbar { align-items:stretch; flex-direction:column; } .hero-art { width:100%; min-height:104px; } .tabs { width:100%; } .tab-btn { flex:1; } .form-grid, .filter-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } #recordTableArea th { top:150px; } }
     @media (max-width:700px) { main { padding-inline:12px; } .form-grid, .filter-grid, .summary-strip, .record-context, .subject-cards { grid-template-columns:1fr; } .choice-group { grid-template-columns:1fr; min-width:100%; } .panel-head { padding-inline:16px; } .form-grid, .filter-grid, .summary-strip, .toolbar, .subject-cards, .record-card-grid { padding-inline:16px; } .record-card-grid { grid-template-columns:1fr; } .record-context { padding-inline:16px; } .hero-art { min-height:92px; } .mascot-bubble { width:98px; height:98px; } .rainbow { right:0; width:148px; } h1 { font-size:1.02rem; } .btn, .tab-btn, input, select { min-height:50px; } .topbar { padding-bottom:16px; } }
     @media print { body { background:#ffffff; } .topbar, .no-print, .tabs, .toolbar, .panel-head.filters, #celebrationLayer, .subject-cards { display:none !important; } main { padding:0; max-width:none; } .panel { box-shadow:none; border:0; margin:0; } .print-content { width:210mm; min-height:297mm; padding:14mm; background:#ffffff; } .print-title { display:block; text-align:center; margin-bottom:14px; } .summary-strip { grid-template-columns:repeat(2, 1fr); } th { position:static; } table { min-width:0; } }
+
+    /* Super Edu Adventure — jadual semakan pantas murid */
+    #recordTableArea { overflow: visible; }
+    .table-instructions { padding: 13px 20px; font-size: .85rem; color: #66549a; background: #fbf6ff; border-bottom: 1px solid #eee3ff; }
+    .student-table-scroll { overflow-x: auto; overscroll-behavior-x: contain; max-width: 100%; }
+    .student-record-table { min-width: 1110px; border-collapse: separate; border-spacing: 0; }
+    .student-record-table thead th { background: #eeeaff; color: #554390; position: sticky; top: 0; z-index: 3; text-align: center; }
+    .student-record-table thead th:nth-child(2) { text-align: left; }
+    .student-record-table td { background: rgba(255,255,255,.96); border-bottom: 1px solid #ebe6f9; padding: 10px 12px; }
+    .student-record-table tbody tr:nth-child(even) td { background: #fbf8ff; }
+    .student-record-table tbody tr:hover td { background: #f4f0ff; }
+    .student-record-table .student-name { min-width: 190px; max-width: 260px; font-size: .88rem; }
+    .student-record-table .number-cell { min-width: 50px; }
+    .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { position: sticky; left: 0; z-index: 2; box-shadow: 5px 0 12px rgba(91,70,170,.05); }
+    .student-record-table th:nth-child(2) { z-index: 4; }
+    .table-buttons { display: flex; align-items: center; gap: 6px; justify-content: center; }
+    .table-choice { border-radius: 13px; min-height: 43px; min-width: 95px; padding: 8px 9px; font-size: .80rem; white-space: nowrap; }
+    .table-choice[data-kind="incomplete"], .table-choice[data-kind="missing"] { min-width: 112px; }
+    .table-choice[data-kind="submit"].active, .table-choice[data-kind="complete"].active { background: #c4f7d9; color: #116238; border-color: #53c68a; }
+    .table-choice[data-kind="missing"].active, .table-choice[data-kind="incomplete"].active { background: #ffebac; color: #825100; border-color: #efc257; }
+    .table-choice[data-kind="absent"].active { background: #e2e8f0; color: #475569; }
+    .table-choice[data-kind="no-reason"].active { background: #ffe1e7; color: #b81947; }
+    .student-record-table .status-preview { font-size: .76rem; padding: 8px 10px; }
+    .student-record-table .score-badge { min-width: 55px; }
+    @media (max-width:700px) {
+      .table-instructions { padding: 12px 14px; }
+      .student-record-table { min-width: 1050px; }
+      .table-choice { min-height: 46px; }
+      .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { min-width: 150px; max-width: 176px; }
+    }
+    @media print { .table-instructions { display:none; } .student-table-scroll { overflow:visible; } .student-record-table th:nth-child(2), .student-record-table td:nth-child(2) { position: static; } }
+
   </style>
 </head>
 <body>
@@ -897,54 +929,56 @@
         el("recordTableArea").innerHTML = `<div class="empty">Tiada murid untuk kelas ini.</div>`;
         return;
       }
-
       const meta = getRecordMeta();
+      const area = el("recordTableArea");
+      const oldScroll = area.querySelector(".student-table-scroll")?.scrollLeft || 0;
       const rows = draftRows.map((row, index) => {
-        const preview = getDetailPreview(row);
-        const tone = row.detail || "pending";
-        return `
-          <article class="record-card">
-            <div class="task-card-head">
-              <div class="student-chip">
-                <div class="student-avatar">${index + 1}</div>
-                <div class="student-name">${escapeHtml(row.student)}<small>${escapeHtml(meta.className)}</small></div>
-              </div>
-              <div class="subject-mini">${getSubjectIcon(meta.subject)} ${escapeHtml(meta.subject)}</div>
-            </div>
-            <div class="status-preview ${tone}">${preview}</div>
-            <div class="card-section">
-              <span class="card-section-label">Status Penghantaran</span>
-              <div class="choice-group" role="group" aria-label="Status hantar ${escapeHtml(row.student)}">
-                <button type="button" class="choice-btn ${row.submission === "submit" ? "active" : ""}" data-action="submission" data-index="${index}" data-value="submit" data-kind="submit">Hantar</button>
-                <button type="button" class="choice-btn ${row.submission === "missing" ? "active" : ""}" data-action="submission" data-index="${index}" data-value="missing" data-kind="missing">Tidak Hantar</button>
-              </div>
-            </div>
-            <div class="card-section">
-              <span class="card-section-label">Butiran Tugasan</span>
-              ${renderDetailButtons(row, index)}
-            </div>
-            <div class="card-footer">
-              <span class="score-badge">⭐ ${row.score === "" ? "-" : row.score}</span>
-            </div>
-          </article>
-        `;
+        const status = row.detail || "pending";
+        const button = (action, value, label, isActive) => `
+          <button type="button" class="choice-btn table-choice ${isActive ? "active" : ""}"
+            data-action="${action}" data-index="${index}" data-value="${value}"
+            data-kind="${value}" aria-pressed="${isActive ? "true" : "false"}"
+            aria-label="${escapeHtml(row.student)}: ${label}">${label}</button>`;
+        return `<tr>
+          <td class="number-cell">${index + 1}</td>
+          <td class="student-name">${escapeHtml(row.student)}</td>
+          <td><div class="table-buttons">
+            ${button("submission", "submit", "✓ Hantar", row.submission === "submit")}
+            ${button("submission", "missing", "✕ Tidak Hantar", row.submission === "missing")}
+          </div></td>
+          <td><div class="table-buttons">
+            ${button("detail", "complete", "✓ Lengkap", row.detail === "complete")}
+            ${button("detail", "incomplete", "◐ Tidak Lengkap", row.detail === "incomplete")}
+          </div></td>
+          <td><div class="table-buttons">
+            ${button("detail", "absent", "Tidak Hadir", row.detail === "absent")}
+            ${button("detail", "no-reason", "Tiada Sebab", row.detail === "no-reason")}
+          </div></td>
+          <td><span class="status-preview ${status}">${getDetailPreview(row)}</span></td>
+          <td><span class="score-badge">⭐ ${row.score === "" ? "-" : row.score}</span></td>
+        </tr>`;
       }).join("");
-
-      el("recordTableArea").innerHTML = `
+      area.innerHTML = `
         <div class="record-context">
           <div><span>Kelas</span><strong>🏫 ${escapeHtml(meta.className)}</strong></div>
           <div><span>Tarikh</span><strong>🗓️ ${formatDate(meta.date)}</strong></div>
           <div><span>Tugasan</span><strong>📝 ${escapeHtml(meta.assignment)}</strong></div>
           <div><span>Subjek</span><strong>${getSubjectIcon(meta.subject)} ${escapeHtml(meta.subject)}</strong></div>
         </div>
-        <div class="record-card-grid">${rows}</div>
-      `;
-
-      document.querySelectorAll("[data-action='submission']").forEach((button) => {
-        button.addEventListener("click", () => setSubmission(Number(button.dataset.index), button.dataset.value));
-      });
-      document.querySelectorAll("[data-action='detail']").forEach((button) => {
-        button.addEventListener("click", () => setDetail(Number(button.dataset.index), button.dataset.value));
+        <div class="table-instructions">✨ Tandakan status setiap murid. Tekan <strong>Lengkap / Tidak Lengkap</strong> untuk terus menandakan Hantar, atau pilih sebab jika Tidak Hantar.</div>
+        <div class="student-table-scroll">
+          <table class="student-record-table">
+            <thead><tr><th>Bil.</th><th>Nama Murid</th><th>Penghantaran</th><th>Status Tugasan</th><th>Sebab Tidak Hantar</th><th>Status Semasa</th><th>Mata</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+      area.querySelector(".student-table-scroll").scrollLeft = oldScroll;
+      area.querySelectorAll("[data-action]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const index = Number(button.dataset.index);
+          if (button.dataset.action === "submission") setSubmission(index, button.dataset.value);
+          else setDetail(index, button.dataset.value);
+        });
       });
     }
 
@@ -991,15 +1025,21 @@
     }
 
     function setSubmission(index, value) {
-      draftRows[index].submission = value;
-      draftRows[index].detail = "";
-      draftRows[index].score = "";
+      const row = draftRows[index];
+      if (!row) return;
+      if (row.submission === value) return;
+      row.submission = value;
+      row.detail = "";
+      row.score = "";
       renderRecordTable();
     }
 
     function setDetail(index, value) {
-      draftRows[index].detail = value;
-      draftRows[index].score = scoreMap[value];
+      const row = draftRows[index];
+      if (!row) return;
+      row.submission = ["complete", "incomplete"].includes(value) ? "submit" : "missing";
+      row.detail = value;
+      row.score = scoreMap[value];
       renderRecordTable();
     }
 

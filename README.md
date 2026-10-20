@@ -125,3 +125,7 @@ CSV Subjek:
 ```text
 https://docs.google.com/spreadsheets/d/e/2PACX-1vSM1t6p0yq--zlMTurZyg4bYq0ls9Osq5sRq4Icfub33xrx0TFr_fnkFl0VRWIAOloMqVzkF05HbLVt/pub?gid=1032463980&single=true&output=csv
 ```
+
+
+## Versi V45 — Jadual pengisian rekod
+Tab Pengisian Rekod menggunakan jadual dengan lajur Bil., Nama Murid, Penghantaran, Status Tugasan, Sebab Tidak Hantar, Status Semasa dan Mata. Pilihan Lengkap / Tidak Lengkap automatik menandakan Hantar; pilihan Tidak Hadir / Tiada Sebab automatik menandakan Tidak Hantar. Semua fungsi Apps Script dan konfigurasi sambungan V44 dikekalkan.
